@@ -8,7 +8,7 @@ function Home(){
     const [inputCity, setInputCity]= useState("");
     const {setCity, weatherData, aqiData, error, background, localTime} = useWeatherData();
     const [aqiColor, setAqiColor]= useState(null);
-    const [theme, setTheme]=useState(null);
+    const [theme, setTheme]=useState("light");
     const cityRef=useRef("");
 
     //to switch between light and dark themes
@@ -95,6 +95,8 @@ function Home(){
       useEffect(()=>{
 
         if(aqiData){
+            console.log("BG",background);
+            
             let colorClass;
             if(aqiData<50){
                 colorClass="text-green-800";
@@ -129,8 +131,8 @@ function Home(){
         // <div id="outermost" class="bg-teal-300 font-medium font-serif h-screen w-dvw pt-2
         //             dark:bg-gradient-to-r dark:from-slate-950 dark:via-grey-800 dark:to-slate-900 dark:text-white">
         <div id="outermost" className="bg-no-repeat bg-center bg-cover bg-amber-200 font-medium font-serif h-screen w-dvw pt-2 
-                                dark:bg-black dark:bg-opacity-65 dark:bg-blend-overlay dark:text-white"
-                                >
+                                dark:bg-black/75 dark:bg-opacity-65 dark:bg-blend-overlay dark:text-white"
+                                style={{backgroundImage: `url(${background})`}}>
             
 
             {/* Search bar */}
@@ -161,7 +163,7 @@ function Home(){
             {/* Displaying data if API fetch success */}
             { weatherData && aqiData && 
             <div className="bg-white/80 rounded-md h-auto w-10/12 m-auto  mt-2 flex flex-col items-center gap-6 shadow-xl shadow-gray-900/50
-             sm:w-8/12 md:w-6/12  xl:w-4/12 md:m-auto md:mt-12 dark:shadow-lg dark:shadow-slate-100/50 dark:bg-gray-900/75">
+             sm:w-8/12 md:w-6/12  xl:w-4/12 md:m-auto md:mt-12 dark:shadow-lg dark:shadow-slate-100/50 dark:bg-gray-800/75">
                 <div> 
                     <h3 className="font-extrabold inline text-2xl"> {weatherData.name}</h3>
                 </div>
@@ -183,7 +185,7 @@ function Home(){
 
             {weatherData && aqiData && 
             <div className="bg-white/80 rounded-md h-auto w-11/12 mt-8 m-auto flex flex-wrap gap-4 justify-between items-center p-2 font-mono shadow-xl shadow-gray-900/50 
-            md:flex-row md:w-10/12 xl:w-8/12 md:m-auto md:min-h-24 md:mt-12 dark:shadow-lg dark:shadow-slate-100/50 dark:bg-gray-900/75">
+            md:flex-row md:w-10/12 xl:w-8/12 md:m-auto md:min-h-24 md:mt-12 dark:shadow-lg dark:shadow-slate-100/50 dark:bg-gray-800/75">
                 <div className="flex gap-2 w-1/3 sm:w-1/4 md:w-auto"> <img src="https://cdn-icons-png.flaticon.com/128/4851/4851827.png" className="h-8 w-8 inline" alt="min-temp"/> 
                 {weatherData.main.temp_min} &deg;C</div>
 

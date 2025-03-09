@@ -1,15 +1,16 @@
 //using Context API.
 import { createContext, useContext, useEffect, useState} from "react";
 import axios from "axios";
-import image1 from '../images/clear-day-sky.jpg';
-import image2 from '../images/fog-night.jpg';
-import image3 from '../images/lightning-night-rain.jpg';
-import image4 from '../images/winter-snowfall.jpg';
-import image5 from '../images/clouds.jpg';
-import image6 from '../images/rainy-day.jpg';
-import image7 from '../images/fog-day.jpg';
-import image8 from '../images/clear-night-sky.jpg';
-import image9 from '../images/clear-evening-sky.jpg';
+import image1 from '../assets/images/clear-day-sky.jpg';
+import image2 from '../assets/images/fog-night.jpg';
+import image3 from '../assets/images/lightning-night-rain.jpg';
+import image4 from '../assets/images/winter-snowfall.jpg';
+import image5 from '../assets/images/clouds.jpg';
+import image6 from '../assets/images/rainy-day.jpg';
+import image7 from '../assets/images/fog-day.jpg';
+import image8 from '../assets/images/clear-night-sky.jpg';
+import image9 from '../assets/images/clear-evening-sky.jpg';
+
 
 
 const weatherContext=createContext();
