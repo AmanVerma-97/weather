@@ -34,7 +34,7 @@ function FetchDataContext(props) {
         const API_KEY="37947d013f98ab57272fe2d0aadbdfdf";
         try {
           // Step 1: Get the city's latitude and longitude using the Geocoding API
-          const geoResponse = await axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${API_KEY}`);
+          const geoResponse = await axios.get(`https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${API_KEY}`);
           
           if (geoResponse.data.length === 0) {
             setError("City not found");
@@ -44,7 +44,7 @@ function FetchDataContext(props) {
           const { lat, lon } = geoResponse.data[0];
   
           // Step 2: Fetch the AQI using the Air Pollution API
-          const aqiResponse = await axios.get(`http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${API_KEY}`);
+          const aqiResponse = await axios.get(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${API_KEY}`);
   
           const aqiValue = aqiResponse.data.list[0].components.pm2_5;
           // console.log(aqiResponse);
