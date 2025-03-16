@@ -155,8 +155,8 @@ function Home(){
             {/* Light Mode/ Dark Mode */}
             <div className="absolute top-4 right-6 h-auto w-6 flex justify-center">
                 <button className="bg-transparent m-auto" onClick={handleThemeSwitch}>
-                    {theme==="dark"? <img src="https://cdn-icons-png.flaticon.com/128/3073/3073665.png" alt="light-mode" className="h-4 w-4 inline"/>
-                                   : <img src="https://cdn-icons-png.flaticon.com/128/8648/8648533.png" alt="dark-mode" className="h-4 w-4 inline"/> }
+                    {theme==="dark"? <img src="https://cdn-icons-png.flaticon.com/128/3073/3073665.png" alt="light-mode" className="h-4 w-4 inline cursor-pointer"/>
+                                   : <img src="https://cdn-icons-png.flaticon.com/128/8648/8648533.png" alt="dark-mode" className="h-4 w-4 inline cursor-pointer"/> }
                 </button>
             </div>
             
