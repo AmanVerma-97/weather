@@ -131,7 +131,7 @@ function Home(){
         // <div id="outermost" class="bg-teal-300 font-medium font-serif h-screen w-dvw pt-2
         //             dark:bg-gradient-to-r dark:from-slate-950 dark:via-grey-800 dark:to-slate-900 dark:text-white">
         <div id="outermost" className="bg-no-repeat bg-center bg-cover bg-amber-200 font-medium font-serif h-screen w-dvw pt-2 
-                                dark:bg-black/75 dark:bg-opacity-65 dark:bg-blend-overlay dark:text-white"
+                                dark:bg-black/85 dark:bg-opacity-65 dark:bg-blend-overlay dark:text-white"
                                 style={{backgroundImage: `url(${background})`}}>
             
 
@@ -156,7 +156,7 @@ function Home(){
             <div className="absolute top-4 right-6 h-auto w-6 flex justify-center">
                 <button className="bg-transparent m-auto" onClick={handleThemeSwitch}>
                     {theme==="dark"? <img src="https://cdn-icons-png.flaticon.com/128/3073/3073665.png" alt="light-mode" className="h-4 w-4 inline"/>
-                                   : <img src="https://cdn-icons-png.flaticon.com/128/17037/17037535.png" alt="dark-mode" className="h-4 w-4 inline"/> }
+                                   : <img src="https://cdn-icons-png.flaticon.com/128/8648/8648533.png" alt="dark-mode" className="h-4 w-4 inline"/> }
                 </button>
             </div>
             
