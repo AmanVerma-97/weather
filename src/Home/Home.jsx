@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useWeatherData } from "../fetchData/fetchDataContext";
 import { Link } from "react-router-dom";
-
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
 function Home(){
     
@@ -9,8 +9,51 @@ function Home(){
     const {setCity, weatherData, aqiData, error, background, localTime} = useWeatherData();
     const [aqiColor, setAqiColor]= useState(null);
     const [theme, setTheme]=useState("light");
+    const [listening, setListening]=useState(false);
     const cityRef=useRef("");
 
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        console.warn("SpeechRecognition is not supported in this browser.");
+    }
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false; // 'false' so that it stops after a small pause, if 'true' it will keep on listening
+    recognition.interimResults = false;
+    recognition.lang = "en-US"; // Set language for voice recognition
+    
+    const startListening = () => {
+        setListening(true);
+        recognition.start();
+
+        recognition.onresult = (event) => {
+
+            
+            
+            const transcript = Array.from(event.results)
+            .map(result => result[0])
+            .map(result => result.transcript)
+            .join('');
+
+            console.log("Voice search--",listening);
+            
+            setInputCity(transcript);
+            handleSearch();
+        };
+    
+        recognition.onend = () => {
+          setListening(false);
+        };
+
+      };
+    
+    const stopListening = () => {
+        setListening(false);
+        recognition.stop();
+        
+        // setInputCity("");
+    }
+    
     //to switch between light and dark themes
 
     // 1.On initial render theme will be same as theme on user's computer
@@ -39,16 +82,12 @@ function Home(){
         setTheme(theme==="dark"? "light" : "dark"); 
     }
 
-    //Set city name for API fetch.
-
-    function handleChange(event){
-        setInputCity(event.target.value);
-    }
 
     function handleSearch(){
+        setListening(false);
         setCity(inputCity);
-        setInputCity("");
-        cityRef.current.focus();
+        
+        // cityRef.current.focus();
     }
 
     const handleKeySearch=(event)=>{
@@ -93,7 +132,7 @@ function Home(){
 
       //set AQi color to show level of AQI
       useEffect(()=>{
-
+        setInputCity("");
         if(aqiData){
             console.log("BG",background);
             
@@ -131,25 +170,37 @@ function Home(){
         // <div id="outermost" class="bg-teal-300 font-medium font-serif h-screen w-dvw pt-2
         //             dark:bg-gradient-to-r dark:from-slate-950 dark:via-grey-800 dark:to-slate-900 dark:text-white">
         <div id="outermost" className="text-black bg-no-repeat bg-center bg-cover bg-amber-200 font-medium font-serif h-screen w-dvw pt-2 
-                                dark:bg-black/85 dark:bg-opacity-65 dark:bg-blend-overlay dark:text-black "
+                                dark:bg-black/85 dark:bg-opacity-65 dark:bg-blend-overlay dark:text-white "
                                 style={{backgroundImage: `url(${background})`}}>
             
 
             {/* Search bar */}
             <div className="m-auto p-3 flex flex-col md:flex-row items-center gap-4 w-fit bg-transparent 
                         mb-8">
-                <div>
-                    <input id="city" type="text" className="bg-blue-200 p-2 placeholder-slate-500 font rounded w-60 md:w-80 text-center
-                     text-black dark:bg-slate-200 dark:border-gray-500 dark:hover:border-blue-300 dark:border-2" 
-                    placeholder="Enter city" ref={cityRef} value={inputCity} onChange={handleChange} onKeyUp={handleKeySearch} required/>
+                
+                <div class=" relative">
+
+                    
+                    <input id="city" type="text" className="inline bg-blue-200 p-2 placeholder-slate-500 font rounded w-60 md:w-80 text-center
+                    text-black dark:bg-slate-200 dark:border-gray-500 dark:hover:border-blue-300 dark:border-2" 
+                    placeholder="Enter city" ref={cityRef} value={inputCity} onChange={(e)=>setInputCity(e.target.value)} onKeyUp={handleKeySearch}  required/>
+                    <button onClick={listening ? stopListening : startListening}>
+                       
+                       {listening ? <img src="https://cdn-icons-png.flaticon.com/128/16311/16311095.png" alt="mic on" className="h-5 w-5 right-1 top-2.5 inline absolute cursor-pointer" /> :<img src="https://cdn-icons-png.flaticon.com/128/25/25682.png" alt="mic off" className="h-5 w-5 right-1 top-2.5 inline absolute cursor-pointer"/> } 
+                        
+                    </button>
                     
                 </div>
+            
                 <div>
                     <button onClick={handleSearch} 
                     className="bg-slate-400 w-60 md:w-auto h-auto rounded p-2
                      hover:bg-slate-700 hover:text-white hover:outline-blue-300 hover:outline-2
                      dark:text-black"> Search </button>
                 </div>
+                
+                
+                
             </div>
 
             {/* Light Mode/ Dark Mode */}
@@ -162,8 +213,8 @@ function Home(){
             
             {/* Displaying data if API fetch success */}
             { weatherData && aqiData && 
-            <div className="border-black border dark:border-white dark:bg-gray-800/95 rounded-md h-auto w-10/12 m-auto  mt-2 flex flex-col items-center gap-6 dark:shadow-xl dark:shadow-gray-900/50
-             sm:w-8/12 md:w-6/12  xl:w-4/12 md:m-auto md:mt-12 p-4  shadow-lg shadow-slate-100/50 bg-stone-300/85">
+            <div className="border-black border dark:border-white dark:bg-gray-800/50 rounded-md h-auto w-10/12 m-auto  mt-2 flex flex-col items-center gap-6 dark:shadow-lg dark:shadow-black
+             sm:w-8/12 md:w-6/12  xl:w-4/12 md:m-auto md:mt-12 p-4  shadow-lg shadow-emerald-950/80 bg-stone-300/85">
                 <div> 
                     <h3 className="font-extrabold inline text-2xl"> {weatherData.name}</h3>
                 </div>
@@ -184,8 +235,8 @@ function Home(){
             }
 
             {weatherData && aqiData && 
-            <div className="border-black border dark:border-white dark:bg-gray-800/95 rounded-md h-auto w-11/12 mt-8 m-auto flex flex-wrap gap-4 justify-between items-center p-2 font-mono dark:shadow-xl dark:shadow-gray-900/50 
-            md:flex-row md:w-10/12 xl:w-8/12 md:m-auto md:min-h-24 md:mt-12 shadow-xl shadow-slate-100/50 bg-stone-300/85">
+            <div className="border-black border dark:border-white dark:bg-gray-800/50 rounded-md h-auto w-11/12 mt-8 m-auto flex flex-wrap gap-4 justify-between items-center p-2 font-mono dark:shadow-lg dark:shadow-black
+            md:flex-row md:w-10/12 xl:w-8/12 md:m-auto md:min-h-24 md:mt-12 shadow-xl shadow-emerald-950/80 bg-stone-300/85">
                 <div className="flex gap-2 w-1/3 sm:w-1/4 md:w-auto"> <img src="https://cdn-icons-png.flaticon.com/128/4851/4851827.png" className="h-8 w-8 inline" alt="min-temp"/> 
                 {weatherData.main.temp_min} &deg;C</div>
 

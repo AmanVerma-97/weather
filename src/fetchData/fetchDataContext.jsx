@@ -1,15 +1,14 @@
 //using Context API.
 import { createContext, useContext, useEffect, useState} from "react";
 import axios from "axios";
-import image1 from '../assets/images/clear-day-sky.jpg';
-import image2 from '../assets/images/fog-night.jpg';
-import image3 from '../assets/images/lightning-night-rain.jpg';
-import image4 from '../assets/images/winter-snowfall.jpg';
-import image5 from '../assets/images/clouds.jpg';
-import image6 from '../assets/images/rainy-day.jpg';
-import image7 from '../assets/images/fog-day.jpg';
-import image8 from '../assets/images/clear-night-sky.jpg';
-import image9 from '../assets/images/clear-evening-sky.jpg';
+import image1 from '../assets/images/clear-day-sky.avif';
+import image2 from '../assets/images/fog-night.avif';
+import image3 from '../assets/images/lightning-night-rain.avif';
+import image4 from '../assets/images/winter-snowfall.avif';
+import image5 from '../assets/images/clouds.avif';
+import image6 from '../assets/images/rainy-day.avif';
+import image7 from '../assets/images/fog-day.avif';
+import image8 from '../assets/images/clear-evening-sky.avif';
 
 
 
@@ -135,12 +134,10 @@ function FetchDataContext(props) {
               if(hours>=7 && hours<17){
                 url=image1;
               }
-                else if(hours>=17 && hours<20){
-                  url=image9;
-                }
-                else{
-                  url=image8;
-                }
+                
+              else{
+                url=image8;
+              }
             }
             else if(mainWeather==="Thunderstorm"){
                   url=image3;
