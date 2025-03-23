@@ -104,7 +104,7 @@ function FetchDataContext(props) {
             }
             const data= await response.json();
             // console.log("weather:",data);
-            console.log(data);
+            // console.log(data);
            
              
             // setCity(data.name);

@@ -6,10 +6,6 @@ function ErrorPage() {
   const {setError, setWeatherData, setAqiData} = useWeatherData();
 
   useEffect(()=>{
-    // console.log("Error",city);
-    // console.log(error);
-    // setCity("");
-    // setError(false);
     setAqiData(null);
     setWeatherData(null);
   },[setAqiData, setWeatherData]);

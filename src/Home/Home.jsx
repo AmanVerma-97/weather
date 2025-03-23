@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useWeatherData } from "../fetchData/fetchDataContext";
 import { Link } from "react-router-dom";
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+
 
 function Home(){
     
@@ -15,38 +15,83 @@ function Home(){
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-        console.warn("SpeechRecognition is not supported in this browser.");
+        alert("SpeechRecognition is not supported in this browser.");
     }
-    const recognition = new SpeechRecognition();
-    recognition.continuous = false; // 'false' so that it stops after a small pause, if 'true' it will keep on listening
-    recognition.interimResults = false;
-    recognition.lang = "en-US"; // Set language for voice recognition
-    
     const startListening = () => {
-        setListening(true);
-        recognition.start();
 
-        recognition.onresult = (event) => {
+        // Check if microphone permission is granted
+         navigator.permissions.query({ name: 'microphone' }).then(function (permissionStatus) {
+            if (permissionStatus.state === 'denied') {
+                // Microphone permission is denied
+                alert("Microphone access is denied. Please enable microphone access in your browser settings.");
+            }
+    });
 
-            
-            
-            const transcript = Array.from(event.results)
-            .map(result => result[0])
-            .map(result => result.transcript)
-            .join('');
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
 
-            console.log("Voice search--",listening);
-            
-            setInputCity(transcript);
-            handleSearch();
-        };
+    // recognition.continuous = true; // 'false' so that it stops after a small pause, if 'true' it will keep on listening
+    // recognition.interimResults = true;
+
+    recognition.start();
+    setListening(true);
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        console.log("You said: ", transcript);
+        setInputCity(transcript);
+        handleSearch();
+    };
+
+    recognition.onerror = (event) => {
+        if (event.error === 'not-allowed') {
+            alert("Microphone access is not allowed. Please enable it in your browser settings.");
+        } else if (event.error === 'no-speech') {
+            alert("No speech detected. Please try again.");
+        } else {
+            alert(`Speech recognition error: ${event.error}`);
+        }
+    }
+   
+    recognition.onend = () => {
+        setListening(false);
+    }
     
-        recognition.onend = () => {
-          setListening(false);
-        };
+ };
 
-      };
+    // Start the recognition process
     
+
+    // const recognition = new SpeechRecognition();
+    // recognition.continuous = true; // 'false' so that it stops after a small pause, if 'true' it will keep on listening
+    // recognition.interimResults = false;
+    // recognition.lang = "en-US"; // Set language for voice recognition
+    
+    // const startListening = () => {
+    //     setListening(true);
+    //     recognition.start();
+
+    //     recognition.onresult = (event) => {
+    //         const transcript = Array.from(event.results)
+    //         .map(result => result[0])
+    //         .map(result => result.transcript)
+    //         .join('');
+            
+    //         setInputCity(transcript);
+    //         handleSearch();
+    //     };
+    
+    //     recognition.onend = () => {
+    //       setListening(false);
+    //     };
+
+    // };
+
+    // recognition.onerror = (event) => {
+    //     alert("Error occurred in recognition: " + event.error);
+    // }
+    
+
     const stopListening = () => {
         setListening(false);
         recognition.stop();
@@ -133,8 +178,9 @@ function Home(){
       //set AQi color to show level of AQI
       useEffect(()=>{
         setInputCity("");
+        setListening(false);
         if(aqiData){
-            console.log("BG",background);
+            // console.log("BG",background);
             
             let colorClass;
             if(aqiData<50){
