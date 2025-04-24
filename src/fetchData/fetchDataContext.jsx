@@ -20,6 +20,7 @@ function useWeatherData(){
 
 function FetchDataContext(props) {
     
+    const [message, setMessage]=useState("");
     const [city,setCity] = useState(null);
     const [weatherData,setWeatherData] = useState(null);
     const [aqiData, setAqiData]= useState(null);
@@ -89,7 +90,6 @@ function FetchDataContext(props) {
         
       }
 
-    
 
     useEffect(()=>{
       const fetchCurrentWeather= async(city)=>{
@@ -112,6 +112,7 @@ function FetchDataContext(props) {
             fetchCurrentAQI(city.toUpperCase());
             setWeatherData(data);
             setError(false);
+           
 
           } catch (error) {
               // console.log(error);
@@ -138,22 +139,28 @@ function FetchDataContext(props) {
               else{
                 url=image8;
               }
+              setMessage("It's a clear sky. Enjoy! 😎");
             }
             else if(mainWeather==="Thunderstorm"){
                   url=image3;
+                  setMessage("Stay indoors and be safe. 🏠");
             }
 
             else if(mainWeather==="Rain"){
                 url=image6;
+                setMessage("It's raining, have fun and carry an umberlla if you go outside. ☔");
             }
             else if(mainWeather==="Snow"){
                 url=image4;
+                setMessage("Wear warm clothes and enjoy the snow. ☃️");
             }
             else if(mainWeather==="Haze"){
                 url=image2;
+                setMessage("Visibility is low. Drive carefully. 🌫️");
             }
             else if(mainWeather==="Clouds"){
                 url=image5;
+                setMessage("Carry an umbrella with you and make sure to put your clothes inside. ⛈️");
             }
             else{
                 url=image7;
@@ -166,7 +173,7 @@ function FetchDataContext(props) {
     return(
         <>
             {/* <h3> I'am fetchData.</h3> */}
-            <weatherContext.Provider value={{aqiData, city, setCity, weatherData, error, setError, setWeatherData, setAqiData,background, localTime}}>
+            <weatherContext.Provider value={{aqiData, city, setCity, weatherData, error, setError, setWeatherData, setAqiData,background, localTime, message}}>
                 {children}
             </weatherContext.Provider>
         </>

@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 
 
 function Home(){
-    
     const [inputCity, setInputCity]= useState("");
-    const {setCity, weatherData, aqiData, error, background, localTime} = useWeatherData();
+    const {setCity, weatherData, aqiData, error, background, localTime, message} = useWeatherData();
     const [aqiColor, setAqiColor]= useState(null);
-    const [theme, setTheme]=useState("light");
+    const [theme, setTheme]=useState("dark");
     const [listening, setListening]=useState(false);
     const cityRef=useRef("");
+    
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -38,9 +38,11 @@ function Home(){
 
     recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
-        console.log("You said: ", transcript);
+        // console.log("You said: ", transcript);
         setInputCity(transcript);
-        handleSearch();
+        if (inputCity && inputCity.trim() !== "") {
+            handleSearch();
+        }
     };
 
     recognition.onerror = (event) => {
@@ -122,22 +124,27 @@ function Home(){
         }
     },[theme])
 
-   
+
     const handleThemeSwitch=()=>{
         setTheme(theme==="dark"? "light" : "dark"); 
     }
 
 
     function handleSearch(){
+        
         setListening(false);
         setCity(inputCity);
         
+        if(!inputCity){
+            alert("Please enter a city name.");
+            return;
+        }
         // cityRef.current.focus();
     }
 
     const handleKeySearch=(event)=>{
         if(event.key==="Enter"){
-            handleSearch();
+            handleSearch(event);
         }
         else{
             setInputCity(event.target.value);
@@ -215,14 +222,14 @@ function Home(){
         // Outermost div
         // <div id="outermost" class="bg-teal-300 font-medium font-serif h-screen w-dvw pt-2
         //             dark:bg-gradient-to-r dark:from-slate-950 dark:via-grey-800 dark:to-slate-900 dark:text-white">
-        <div id="outermost" className="text-black bg-no-repeat bg-center bg-cover bg-amber-200 font-medium font-serif h-screen w-dvw pt-2 
+        <div id="outermost" className="text-black bg-no-repeat bg-center bg-cover bg-amber-200 font-medium font-serif min-h-screen h-full w-dvw pt-2 pb-2
                                 dark:bg-black/85 dark:bg-opacity-65 dark:bg-blend-overlay dark:text-white "
                                 style={{backgroundImage: `url(${background})`}}>
             
 
             {/* Search bar */}
             <div className="m-auto p-3 flex flex-col md:flex-row items-center gap-4 w-fit bg-transparent 
-                        mb-8">
+                        mb-6 md:mb-8">
                 
                 <div class=" relative">
 
@@ -262,11 +269,11 @@ function Home(){
             <div className="border-black border dark:border-white dark:bg-gray-800/50 rounded-md h-auto w-10/12 m-auto  mt-2 flex flex-col items-center gap-6 dark:shadow-lg dark:shadow-black
              sm:w-8/12 md:w-6/12  xl:w-4/12 md:m-auto md:mt-12 p-4  shadow-lg shadow-emerald-950/80 bg-stone-300/85">
                 <div> 
-                    <h3 className="font-extrabold inline text-2xl"> {weatherData.name}</h3>
+                    <h3 className="font-extrabold inline text-xl md:text-2xl"> {weatherData.name}</h3>
                 </div>
 
 
-                <div> <h1 className="font-extrabold text-3xl"> {weatherData.main.temp} &deg;C </h1> </div>
+                <div> <h1 className="font-extrabold text-2xl md:text-3xl"> {weatherData.main.feels_like} &deg;C </h1> </div>
 
                 <div><h3 className="font-extrabold"> {weatherData.weather[0].main} </h3></div>
 
@@ -281,7 +288,7 @@ function Home(){
             }
 
             {weatherData && aqiData && 
-            <div className="border-black border dark:border-white dark:bg-gray-800/50 rounded-md h-auto w-11/12 mt-8 m-auto flex flex-wrap gap-4 justify-between items-center p-2 font-mono dark:shadow-lg dark:shadow-black
+            <div className="border-black border dark:border-white dark:bg-gray-800/50 rounded-md h-auto w-11/12 mt-6 m-auto flex flex-wrap gap-4 justify-between items-center p-2 font-mono dark:shadow-lg dark:shadow-black
             md:flex-row md:w-10/12 xl:w-8/12 md:m-auto md:min-h-24 md:mt-12 shadow-xl shadow-emerald-950/80 bg-stone-300/85">
                 <div className="flex gap-2 w-1/3 sm:w-1/4 md:w-auto"> <img src="https://cdn-icons-png.flaticon.com/128/4851/4851827.png" className="h-8 w-8 inline" alt="min-temp"/> 
                 {weatherData.main.temp_min} &deg;C</div>
@@ -301,7 +308,13 @@ function Home(){
                 <div className="flex gap-2 w-1/3 sm:w-1/4 md:w-auto"> <img src="https://cdn-icons-png.flaticon.com/128/3579/3579552.png" className="h-8 w-8 inline" alt="sunset"/> 
                 {weatherData.wind.speed} Km/Hr </div>
 
+                
+
             </div>}
+
+                {weatherData && <div className=" mt-3 lg:mt-8 m-auto w-8/10 text-center block">
+                <h2 className=" font-bold "> <p className=" italic inline">  Weather tip : </p> {message}</h2>
+                </div>}
         </div>
         }
         
