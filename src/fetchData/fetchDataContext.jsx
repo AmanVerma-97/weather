@@ -148,7 +148,7 @@ function FetchDataContext(props) {
 
             else if(mainWeather==="Rain"){
                 url=image6;
-                setMessage("It's raining, have fun and carry an umberlla if you go outside. ☔");
+                setMessage("It's raining, have fun and carry an umbrella if you go outside. ☔");
             }
             else if(mainWeather==="Snow"){
                 url=image4;

@@ -9,13 +9,9 @@ const routes=createBrowserRouter([
   {
     path:"/",
     element:<Home/>,
+
+    errorElement:<ErrorPage/>,
   },
-    
-  {
-    path:"/error", 
-    element:<ErrorPage/>
-  }
-    
   
 ])
 function App() {
